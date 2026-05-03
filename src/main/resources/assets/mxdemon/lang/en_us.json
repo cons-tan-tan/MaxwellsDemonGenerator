@@ -1,0 +1,13 @@
+{
+  "itemGroup.mxdemon": "Example Mod Tab",
+  "block.mxdemon.example_block": "Example Block",
+  "item.mxdemon.example_item": "Example Item",
+
+  "mxdemon.configuration.title": "Maxwell's Demon Generator Configs",
+  "mxdemon.configuration.section.mxdemon.common.toml": "Maxwell's Demon Generator Configs",
+  "mxdemon.configuration.section.mxdemon.common.toml.title": "Maxwell's Demon Generator Configs",
+  "mxdemon.configuration.items": "Item List",
+  "mxdemon.configuration.logDirtBlock": "Log Dirt Block",
+  "mxdemon.configuration.magicNumberIntroduction": "Magic Number Text",
+  "mxdemon.configuration.magicNumber": "Magic Number"
+}
