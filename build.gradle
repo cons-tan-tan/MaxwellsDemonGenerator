@@ -110,6 +110,12 @@ neoForge {
 // "optional", meaning it will not be pulled by dependents of this mod.
 configurations {
     runtimeClasspath.extendsFrom localRuntime
+
+    neoforgeSourcesJar {
+        canBeConsumed = false
+        canBeResolved = true
+        transitive = false
+    }
 }
 
 dependencies {
@@ -134,6 +140,8 @@ dependencies {
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+
+    neoforgeSourcesJar "net.neoforged:neoforge:${neo_version}:sources"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -183,4 +191,29 @@ idea {
         downloadSources = true
         downloadJavadoc = true
     }
+}
+
+// Source extraction tasks for AI coding agents that cannot read inside JAR files.
+// Outputs land under build/, so they are gitignored and removed by `gradlew clean`.
+tasks.register('extractMcSources', Copy) {
+    group = 'ai-tooling'
+    description = 'Extracts decompiled Minecraft (NeoForge-patched) sources for AI agent navigation.'
+    dependsOn 'createMinecraftArtifacts'
+    from(zipTree(layout.buildDirectory.file("moddev/artifacts/minecraft-patched-${neo_version}-sources.jar")))
+    into(layout.buildDirectory.dir('moddev/extracted-sources'))
+    include '**/*.java'
+}
+
+tasks.register('extractNeoforgeSources', Copy) {
+    group = 'ai-tooling'
+    description = 'Extracts NeoForge mod loader sources for AI agent navigation.'
+    from { zipTree(configurations.neoforgeSourcesJar.singleFile) }
+    into(layout.buildDirectory.dir('moddev/extracted-sources'))
+    include '**/*.java'
+}
+
+tasks.register('extractAllSources') {
+    group = 'ai-tooling'
+    description = 'Extracts both Minecraft and NeoForge sources for AI agent navigation.'
+    dependsOn 'extractMcSources', 'extractNeoforgeSources'
 }
